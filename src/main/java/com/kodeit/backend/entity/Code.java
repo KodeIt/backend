@@ -24,6 +24,8 @@ public class Code {
     private Language language;
     private Date updated;
     private Long stars;
+    private String title;
+    private String description;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

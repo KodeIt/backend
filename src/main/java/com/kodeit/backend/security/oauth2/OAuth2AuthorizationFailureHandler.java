@@ -16,6 +16,7 @@ public class OAuth2AuthorizationFailureHandler implements AuthenticationFailureH
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+        System.out.println(exception.getMessage());
         response.sendRedirect(forbiddenRedirect);
     }
 }

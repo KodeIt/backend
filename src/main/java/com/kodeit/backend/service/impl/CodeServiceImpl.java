@@ -54,6 +54,8 @@ public class CodeServiceImpl implements CodeService {
         c.setLanguage(code.getLanguage());
         c.setCode(code.getCode());
         c.setUpdated(new Date());
+        c.setTitle(code.getTitle());
+        c.setDescription(code.getDescription());
     }
 
     @Override
