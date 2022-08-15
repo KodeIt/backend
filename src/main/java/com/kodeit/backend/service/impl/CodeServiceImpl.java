@@ -121,6 +121,7 @@ public class CodeServiceImpl implements CodeService {
         var code = get(codeId);
         var user = getAuthenticatedUser();
         if (user.getCodesWritten().contains(code)) {
+            userRepository.getStarredUsers(code).forEach(u -> u.getCodesStarred().remove(code));
             user.getCodesWritten().remove(code);
             codeRepository.delete(code);
         } else

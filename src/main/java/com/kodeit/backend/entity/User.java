@@ -38,7 +38,7 @@ public class User implements UserDetails {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
     private List<Code> codesWritten;
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH, CascadeType.REMOVE})
     private List<Code> codesStarred;
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
