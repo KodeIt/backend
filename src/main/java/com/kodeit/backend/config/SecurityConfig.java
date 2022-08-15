@@ -32,7 +32,8 @@ public class SecurityConfig {
                 .and()
                 .successHandler(oAuth2AuthorizationSuccessHandler())
                 .failureHandler(oAuth2AuthorizationFailureHandler());
-        http.cors().and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+//        http.cors().and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+        http.cors().and().csrf().disable();
         return http.build();
     }
 
