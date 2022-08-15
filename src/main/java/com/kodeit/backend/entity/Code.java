@@ -1,5 +1,6 @@
 package com.kodeit.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.kodeit.backend.enums.Language;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,6 +27,9 @@ public class Code {
     private Long stars;
     private String title;
     private String description;
+    @JsonInclude
+    @Transient
+    private Boolean isStarred; // Stores if the current user has starred this code or not
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

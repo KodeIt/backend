@@ -31,5 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+codes/
 
 src/main/resources/applicatio*

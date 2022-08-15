@@ -73,4 +73,24 @@ public class CodeControllerPrivate {
         }
     }
 
+    @GetMapping("/starred/length")
+    public ResponseEntity<?> getCodesStarredLength() {
+        try{
+            return ResponseEntity.ok().body(codeService.getCodesStarredLength());
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/written/length")
+    public ResponseEntity<?> getCodesWrittenLength() {
+        try{
+            return ResponseEntity.ok().body(codeService.getCodesWrittenLength());
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }

@@ -3,6 +3,8 @@ package com.kodeit.backend.service;
 import com.kodeit.backend.entity.Code;
 import com.kodeit.backend.entity.User;
 import com.kodeit.backend.exception.code.CodeException;
+import com.kodeit.backend.exception.user.UserNotFoundException;
+import com.kodeit.backend.modal.CodeSearchOptions;
 import com.kodeit.backend.modal.ExecutionOutput;
 import org.springframework.data.domain.Page;
 
@@ -16,7 +18,7 @@ public interface CodeService {
     /*
      * Gets all the codes till date. To be removed soon
      */
-    Page<Code> getAllCodes();
+    Page<Code> getAllCodes(CodeSearchOptions codeSearchOptions);
 
     /*
      * Updates code, input, language of a code
@@ -42,6 +44,17 @@ public interface CodeService {
 
     void unStarCode(Long codeId) throws CodeException;
 
-    Page<User> getStarredUsers(Long codeId) throws CodeException;
+    Integer getCodesStarredLength();
+
+    Integer getCodesWrittenLength();
+    /*
+     * Gets the codes written by the user referred
+     */
+    Page<Code> getCodesWritten(Long userId, CodeSearchOptions codeSearchOptions) throws UserNotFoundException;
+
+    /*
+     * Gets the codes starred by the user referred
+     */
+    Page<Code> getCodesStarred(Long userId, CodeSearchOptions codeSearchOptions) throws UserNotFoundException;
 
 }

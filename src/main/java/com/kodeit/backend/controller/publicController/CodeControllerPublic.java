@@ -1,6 +1,7 @@
 package com.kodeit.backend.controller.publicController;
 
 import com.kodeit.backend.entity.Code;
+import com.kodeit.backend.modal.CodeSearchOptions;
 import com.kodeit.backend.service.CodeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +31,10 @@ public class CodeControllerPublic {
         }
     }
 
-    @GetMapping("/")
-    public ResponseEntity<?> getAll() {
+    @PutMapping("/")
+    public ResponseEntity<?> getAll(@RequestBody CodeSearchOptions codeSearchOptions) {
         try{
-            return ResponseEntity.ok().body(codeService.getAllCodes());
+            return ResponseEntity.ok().body(codeService.getAllCodes(codeSearchOptions));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -50,14 +51,23 @@ public class CodeControllerPublic {
         }
     }
 
-    @GetMapping("/{codeId}/stars")
-    public ResponseEntity<?> getStars(@PathVariable("codeId") Long codeId) {
+    @PutMapping("/starred/{userId}")
+    public ResponseEntity<?> getCodesStarred(@PathVariable("userId") Long userId, @RequestBody CodeSearchOptions searchOptions) {
         try {
-            codeService.getStarredUsers(codeId);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok().body(codeService.getCodesStarred(userId, searchOptions));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/written/{userId}")
+    public ResponseEntity<?> getCodesWritten(@PathVariable("userId") Long userId, @RequestBody CodeSearchOptions codeSearchOptions) {
+        try {
+            return ResponseEntity.ok().body(codeService.getCodesWritten(userId, codeSearchOptions));
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

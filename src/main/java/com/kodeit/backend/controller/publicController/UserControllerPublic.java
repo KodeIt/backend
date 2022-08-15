@@ -1,14 +1,10 @@
 package com.kodeit.backend.controller.publicController;
 
-import com.kodeit.backend.security.jwt.JWTTokenUtil;
 import com.kodeit.backend.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/public/user")
@@ -17,12 +13,9 @@ public class UserControllerPublic {
 
     private final UserService userService;
 
-    private final JWTTokenUtil jwtTokenUtil;
-
     @Autowired
-    public UserControllerPublic(UserService userService, JWTTokenUtil jwtTokenUtil) {
+    public UserControllerPublic(UserService userService) {
         this.userService = userService;
-        this.jwtTokenUtil = jwtTokenUtil;
     }
 
     @GetMapping("/{userId}")
@@ -36,9 +29,9 @@ public class UserControllerPublic {
     }
 
     @GetMapping("/{userId}/followers")
-    public ResponseEntity<?> getFollowers(@PathVariable("userId") Long userId) {
+    public ResponseEntity<?> getFollowers(@PathVariable("userId") Long userId, @RequestParam("pageIndex") Integer pageIndex) {
         try {
-            return ResponseEntity.ok().body(userService.getFollowers(userId));
+            return ResponseEntity.ok().body(userService.getFollowers(userId, pageIndex));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -46,32 +39,42 @@ public class UserControllerPublic {
     }
 
     @GetMapping("/{userId}/following")
-    public ResponseEntity<?> getFollowing(@PathVariable("userId") Long userId) {
+    public ResponseEntity<?> getFollowing(@PathVariable("userId") Long userId, @RequestParam("pageIndex") Integer pageIndex) {
         try {
-            return ResponseEntity.ok().body(userService.getFollowing(userId));
+            return ResponseEntity.ok().body(userService.getFollowing(userId, pageIndex));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @GetMapping("/{userId}/codes/starred")
-    public ResponseEntity<?> getCodesStarred(@PathVariable("userId") Long userId) {
+    @GetMapping("/{userId}/followers/count")
+    public ResponseEntity<?> getFollowersCount(@PathVariable("userId") Long userId) {
         try {
-            return ResponseEntity.ok().body(userService.getCodesStarred(userId));
+            return ResponseEntity.ok().body(userService.getFollowersCount(userId));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @GetMapping("/{userId}/codes/written")
-    public ResponseEntity<?> getCodesWritten(@PathVariable("userId") Long userId) {
+    @GetMapping("/{userId}/following/count")
+    public ResponseEntity<?> getFollowingCount(@PathVariable("userId") Long userId) {
         try {
-            return ResponseEntity.ok().body(userService.getCodesWritten(userId));
+            return ResponseEntity.ok().body(userService.getFollowingCount(userId));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/{codeId}/stars")
+    public ResponseEntity<?> getStars(@PathVariable("codeId") Long codeId, @RequestParam("pageIndex") Integer pageIndex) {
+        try {
+            return ResponseEntity.ok().body(userService.getStarredUsers(codeId, pageIndex));
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return ResponseEntity.badRequest().build();
         }
     }
 

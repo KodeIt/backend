@@ -1,6 +1,7 @@
 package com.kodeit.backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,9 @@ public class User implements UserDetails {
     private Long level;
     private Long points;
     private Date memberSince;
+    @Transient
+    @JsonInclude
+    private Boolean isFollowing; // Stores if the current user is following "this" user or not at runtime
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
     private List<Code> codesWritten;

@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -39,9 +40,8 @@ public class UserControllerPrivate {
 
     @PutMapping("/")
     public ResponseEntity<?> updateUser(@RequestBody User user) {
-        try {
-            userService.updateUser(user);
-            return ResponseEntity.ok().build();
+        try{
+            return ResponseEntity.ok().body(userService.updateUser(user));
         }  catch (Exception e) {
             log.error(e.getMessage(), e);
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -63,17 +63,6 @@ public class UserControllerPrivate {
         JWTTokenBlacklistRepository.addToBlacklist(jwt.getAccessToken());
         JWTTokenBlacklistRepository.addToBlacklist(jwt.getRefreshToken());
         return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/followers/add/{userId}")
-    public ResponseEntity<?> addFollower(@PathVariable("userId") Long userId) {
-        try {
-            userService.addFollower(userId);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
     @GetMapping("/followers/remove/{userId}")
@@ -114,6 +103,16 @@ public class UserControllerPrivate {
         try {
             userService.deleteUser();
             return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/logo")
+    public ResponseEntity<?> uploadLogo(@RequestParam("file") MultipartFile file) {
+        try {
+            return ResponseEntity.ok().body(userService.uploadLogo(file));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return ResponseEntity.badRequest().body(e.getMessage());

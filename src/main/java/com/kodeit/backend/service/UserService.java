@@ -2,10 +2,15 @@ package com.kodeit.backend.service;
 
 import com.kodeit.backend.entity.Code;
 import com.kodeit.backend.entity.User;
+import com.kodeit.backend.exception.code.CodeException;
 import com.kodeit.backend.exception.user.EmailExistsException;
 import com.kodeit.backend.exception.user.UserNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public interface UserService extends UserDetailsService {
 
@@ -37,28 +42,16 @@ public interface UserService extends UserDetailsService {
     /*
      * Gets the followers of the user referred
      */
-    Page<User> getFollowers(Long userId) throws UserNotFoundException;
+    Page<User> getFollowers(Long userId, Integer pageIndex) throws UserNotFoundException;
 
     /*
      * Gets the following of the user referred
      */
-    Page<User> getFollowing(Long userId) throws UserNotFoundException;
+    Page<User> getFollowing(Long userId, Integer pageIndex) throws UserNotFoundException;
 
-    /*
-     * Gets the codes starred by the user referred
-     */
-    Page<Code> getCodesStarred(Long userId) throws UserNotFoundException;
+    Integer getFollowersCount(Long userId) throws UserNotFoundException;
 
-    /*
-     * Gets the codes written by the user referred
-     */
-    Page<Code> getCodesWritten(Long userId) throws UserNotFoundException;
-
-    /*
-     * Adds the given user id to the list of followers of
-     * the current user
-     */
-    void addFollower(Long userId) throws UserNotFoundException;
+    Integer getFollowingCount(Long userId) throws UserNotFoundException;
 
     /*
      * Removes the given user from the list of followers of
@@ -81,11 +74,15 @@ public interface UserService extends UserDetailsService {
     /*
      * Updates user specific details
      */
-    void updateUser(User user);
+    User updateUser(User user);
 
     /*
      * Permanently deletes the user and all their data
      */
     void deleteUser();
+
+    String uploadLogo(MultipartFile file) throws IOException;
+
+    Page<User> getStarredUsers(Long codeId, Integer pageIndex) throws CodeException;
 
 }

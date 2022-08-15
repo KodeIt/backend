@@ -16,8 +16,8 @@ public class CodeRunner {
 
     private static List<String> createFilesAndFolders(Code code) throws InternalError {
         try {
-            String folderName = UUID.randomUUID().toString();
-            String fileName = UUID.randomUUID().toString();
+            String folderName = UUID.randomUUID().toString().substring(0, 6);
+            String fileName = UUID.randomUUID().toString().substring(0, 6);
 
             switch (code.getLanguage()) {
                 case C -> fileName = fileName.concat(".c");
@@ -26,11 +26,12 @@ public class CodeRunner {
                 case SHELL -> fileName = fileName.concat(".sh");
                 case PYTHON -> fileName = fileName.concat(".py");
                 case TYPESCRIPT -> fileName = fileName.concat(".ts");
+                case JAVASCRIPT -> fileName = fileName.concat(".js");
                 default -> throw new InternalError();
             }
 
             File folder = new File(folderName);
-            File codeFile = new File(folderName + "/" + fileName);
+            File codeFile = new File("codes/" + folderName + "/" + fileName);
 //            if (!codeFile.createNewFile()) throw new InternalError();
             codeFile.getParentFile().mkdirs();
             codeFile.createNewFile();
@@ -66,7 +67,8 @@ public class CodeRunner {
             case PYTHON -> executionCommand = "timeout 1s python3 {0}/{1} < {0}/input.txt; rm -rf {0}";
             case SHELL -> executionCommand = "timeout 1s sh {0}/{1} < {0}/input.txt; rm -rf {0}";
             case JAVA -> executionCommand = "javac {0}/{1} && timeout 1s java {0}/{1} < {0}/input.txt; rm -rf {0}";
-            case TYPESCRIPT -> executionCommand = "timeout 5s npx ts-node {0}/{1} < {0}/input.txt; rm -rf {0}";
+            case TYPESCRIPT -> executionCommand = "timeout 1s npx ts-node {0}/{1} < {0}/input.txt; rm -rf {0}";
+            case JAVASCRIPT -> executionCommand = "timeout 1s npx node {0}/{1} < {0}/input.txt; rm -rf {0}";
             default -> throw new InternalError();
         }
 

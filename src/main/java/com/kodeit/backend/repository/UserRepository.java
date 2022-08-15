@@ -23,6 +23,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "SELECT U.following FROM User U WHERE U.id = :userId")
     Page<User> getFollowing(@Param("userId") Long userId, Pageable pageable);
 
-    @Query(value = "SELECT U.following FROM User U WHERE :code IN U.codesStarred")
+    @Query(value = "SELECT U FROM User U WHERE :code IN elements(U.codesStarred)")
     Page<User> getStarredUsers(@Param("code")Code code, Pageable pageable);
 }
