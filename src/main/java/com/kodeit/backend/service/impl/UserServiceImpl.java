@@ -201,7 +201,10 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void deleteUser() {
-        userRepository.delete(getAuthenticatedUser());
+        User u = getAuthenticatedUser();
+        u.getFollowers().forEach(f -> f.getFollowing().remove(u));
+        u.getCodesStarred().forEach(c -> c.getStarredUsers().remove(u));
+        userRepository.delete(u);
     }
 
     @Override
@@ -232,7 +235,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<User> getStarredUsers(Long codeId, Integer pageIndex) throws CodeException {
         Code code = codeRepository.findById(codeId).orElseThrow(CodeNotFoundException::new);
-        return setFollowing(userRepository.getStarredUsers(code, PageRequest.of(pageIndex == null ? 0 : pageIndex, 10)));
+        Pageable p = PageRequest.of(pageIndex == null ? 0 : pageIndex, 10, Sort.by(Sort.Direction.DESC, "name"));
+        return new PageImpl<>(code.getStarredUsers(), p, code.getStarredUsers().size());
     }
 
 }

@@ -41,6 +41,17 @@ public class CodeServiceImpl implements CodeService {
         this.userRepository = userRepository;
     }
 
+    @Transactional
+    public void setPointsAndLevel(User u) {
+        u.setPoints(u.getPoints()+5);
+        int start = 10;
+        for (int a = 0; a < u.getLevel(); a++) {
+            start += start * 2;
+        }
+        if (start == u.getPoints())
+            u.setLevel(u.getLevel()+1);
+    }
+
     private List<Language> getSelectedLanguages(CodeSearchOptions searchOptions) {
         List<Language> languages = List.of(
                 Language.C,
@@ -121,7 +132,7 @@ public class CodeServiceImpl implements CodeService {
         var code = get(codeId);
         var user = getAuthenticatedUser();
         if (user.getCodesWritten().contains(code)) {
-            userRepository.getStarredUsers(code).forEach(u -> u.getCodesStarred().remove(code));
+            code.getStarredUsers().forEach(u -> u.getCodesStarred().remove(code));
             user.getCodesWritten().remove(code);
             codeRepository.delete(code);
         } else
@@ -135,6 +146,8 @@ public class CodeServiceImpl implements CodeService {
         code.setUpdated(new Date());
         code.setUser(user);
         code.setStars(0L);
+        code.setStarredUsers(new ArrayList<>());
+        setPointsAndLevel(user);
         code = codeRepository.save(code);
         user.getCodesWritten().add(code);
         return code.getId();
