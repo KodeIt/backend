@@ -35,7 +35,7 @@ public class CodeRunner {
 //            if (!codeFile.createNewFile()) throw new InternalError();
             codeFile.getParentFile().mkdirs();
             codeFile.createNewFile();
-            File input = new File(folderName + "/input.txt");
+            File input = new File("codes/" + folderName + "/input.txt");
 //            if(!input.createNewFile()) throw new InternalError();
             input.createNewFile();
 
