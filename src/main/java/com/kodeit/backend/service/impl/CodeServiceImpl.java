@@ -42,7 +42,7 @@ public class CodeServiceImpl implements CodeService {
     }
 
     @Transactional
-    public void setPointsAndLevel(User u) {
+    public void addPointsAndLevel(User u) {
         u.setPoints(u.getPoints()+5);
         int start = 10;
         for (int a = 0; a < u.getLevel(); a++) {
@@ -50,6 +50,17 @@ public class CodeServiceImpl implements CodeService {
         }
         if (start == u.getPoints())
             u.setLevel(u.getLevel()+1);
+    }
+
+    @Transactional
+    public void deductPointsAndLevel(User u) {
+        u.setPoints(u.getPoints()-5);
+        int start = 10;
+        for (int a = 0; a < u.getLevel(); a++) {
+            start += start * 2;
+        }
+        if (start < u.getPoints())
+            u.setLevel(u.getLevel()-1);
     }
 
     private List<Language> getSelectedLanguages(CodeSearchOptions searchOptions) {
@@ -134,6 +145,7 @@ public class CodeServiceImpl implements CodeService {
         if (user.getCodesWritten().contains(code)) {
             code.getStarredUsers().forEach(u -> u.getCodesStarred().remove(code));
             user.getCodesWritten().remove(code);
+            deductPointsAndLevel(user);
             codeRepository.delete(code);
         } else
             throw new UnauthorizedActionException();
@@ -147,7 +159,7 @@ public class CodeServiceImpl implements CodeService {
         code.setUser(user);
         code.setStars(0L);
         code.setStarredUsers(new ArrayList<>());
-        setPointsAndLevel(user);
+        addPointsAndLevel(user);
         code = codeRepository.save(code);
         user.getCodesWritten().add(code);
         return code.getId();
