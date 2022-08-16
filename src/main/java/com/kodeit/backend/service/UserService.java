@@ -1,15 +1,12 @@
 package com.kodeit.backend.service;
 
-import com.kodeit.backend.entity.Code;
 import com.kodeit.backend.entity.User;
 import com.kodeit.backend.exception.code.CodeException;
-import com.kodeit.backend.exception.user.EmailExistsException;
 import com.kodeit.backend.exception.user.UserNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public interface UserService extends UserDetailsService {
@@ -54,22 +51,16 @@ public interface UserService extends UserDetailsService {
     Integer getFollowingCount(Long userId) throws UserNotFoundException;
 
     /*
-     * Removes the given user from the list of followers of
-     * the current user
-     */
-    void removeFollower(Long userId) throws UserNotFoundException;
-
-    /*
      * Adds the given user to the following list of
      * the current user
      */
-    void addFollowing(Long userId) throws UserNotFoundException;
+    void follow(Long userId) throws UserNotFoundException;
 
     /*
      * Removes the given user from the following list of
      * the current user
      */
-    void removeFollowing(Long userId) throws UserNotFoundException;
+    void unfollow(Long userId) throws UserNotFoundException;
 
     /*
      * Updates user specific details

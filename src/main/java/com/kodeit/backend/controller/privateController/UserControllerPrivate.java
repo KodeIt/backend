@@ -65,21 +65,10 @@ public class UserControllerPrivate {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/followers/remove/{userId}")
-    public ResponseEntity<?> removeFollower(@PathVariable("userId") Long userId) {
-        try {
-            userService.removeFollower(userId);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
     @GetMapping("/following/add/{userId}")
-    public ResponseEntity<?> addFollowing(@PathVariable("userId") Long userId) {
+    public ResponseEntity<?> follow(@PathVariable("userId") Long userId) {
         try {
-            userService.addFollowing(userId);
+            userService.follow(userId);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -88,9 +77,9 @@ public class UserControllerPrivate {
     }
 
     @GetMapping("/following/remove/{userId}")
-    public ResponseEntity<?> removeFollowing(@PathVariable("userId") Long userId) {
+    public ResponseEntity<?> unfollow(@PathVariable("userId") Long userId) {
         try {
-            userService.removeFollowing(userId);
+            userService.unfollow(userId);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             log.error(e.getMessage(), e);

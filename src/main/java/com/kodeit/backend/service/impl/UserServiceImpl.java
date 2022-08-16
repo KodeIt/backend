@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService {
         User a = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         User b = getAuthenticatedUser();
         if (b != null)
-            a.setIsFollowing(b.getFollowers().contains(a));
+            a.setIsFollowing(b.getFollowing().contains(a));
         return a;
     }
 
@@ -150,18 +150,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void removeFollower(Long userId) throws UserNotFoundException {
-        User user = getAuthenticatedUser();
-        User u2 = get(userId);
-        if(user.getFollowers().contains(u2)) {
-            user.getFollowers().remove(u2);
-            u2.getFollowing().remove(user);
-        }
-    }
-
-    @Override
-    @Transactional
-    public void addFollowing(Long userId) throws UserNotFoundException {
+    public void follow(Long userId) throws UserNotFoundException {
         User user = getAuthenticatedUser();
         User u2 = get(userId);
 
@@ -177,7 +166,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void removeFollowing(Long userId) throws UserNotFoundException {
+    public void unfollow(Long userId) throws UserNotFoundException {
         User user = getAuthenticatedUser();
         User u2 = get(userId);
         if(user.getFollowing().contains(u2)) {
