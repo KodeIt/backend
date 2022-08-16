@@ -61,8 +61,8 @@ public class CodeRunner {
         String executionCommand;
 
         switch (code.getLanguage()) {
-            case C -> executionCommand = "gcc -o codes/{0}/output {0}/{1} && timeout 1s codes/{0}/output < codes/{0}/input.txt; rm -rf codes/{0}";
-            case CPP -> executionCommand = "g++ -o codes/{0}/output {0}/{1} && timeout 1s codes/{0}/output < codes/{0}/input.txt; rm -rf codes/{0}";
+            case C -> executionCommand = "gcc -o codes/{0}/output codes/{0}/{1} && timeout 1s codes/{0}/output < codes/{0}/input.txt; rm -rf codes/{0}";
+            case CPP -> executionCommand = "g++ -o codes/{0}/output codes/{0}/{1} && timeout 1s codes/{0}/output < codes/{0}/input.txt; rm -rf codes/{0}";
             case PYTHON -> executionCommand = "timeout 1s python3 codes/{0}/{1} < codes/{0}/input.txt; rm -rf codes/{0}";
             case SHELL -> executionCommand = "timeout 1s sh codes/{0}/{1} < codes/{0}/input.txt; rm -rf codes/{0}";
             case JAVA -> executionCommand = "javac codes/{0}/{1} && timeout 1s java codes/{0}/{1} < codes/{0}/input.txt; rm -rf codes/{0}";
