@@ -30,7 +30,6 @@ public class CodeRunner {
                 default -> throw new InternalError();
             }
 
-            File folder = new File(folderName);
             File codeFile = new File("codes/" + folderName + "/" + fileName);
 //            if (!codeFile.createNewFile()) throw new InternalError();
             codeFile.getParentFile().mkdirs();
@@ -59,16 +58,16 @@ public class CodeRunner {
         List<String> metadata = createFilesAndFolders(code);
         String fileName = metadata.get(0);
         String folderName = metadata.get(1);
-        String executionCommand = "";
+        String executionCommand;
 
         switch (code.getLanguage()) {
-            case C -> executionCommand = "gcc -o {0}/output {0}/{1} && timeout 1s ./{0}/output < {0}/input.txt; rm -rf {0}";
-            case CPP -> executionCommand = "g++ -o {0}/output {0}/{1} && timeout 1s ./{0}/output < {0}/input.txt; rm -rf {0}";
-            case PYTHON -> executionCommand = "timeout 1s python3 {0}/{1} < {0}/input.txt; rm -rf {0}";
-            case SHELL -> executionCommand = "timeout 1s sh {0}/{1} < {0}/input.txt; rm -rf {0}";
-            case JAVA -> executionCommand = "javac {0}/{1} && timeout 1s java {0}/{1} < {0}/input.txt; rm -rf {0}";
-            case TYPESCRIPT -> executionCommand = "timeout 1s npx ts-node {0}/{1} < {0}/input.txt; rm -rf {0}";
-            case JAVASCRIPT -> executionCommand = "timeout 1s npx node {0}/{1} < {0}/input.txt; rm -rf {0}";
+            case C -> executionCommand = "gcc -o codes/{0}/output {0}/{1} && timeout 1s codes/{0}/output < codes/{0}/input.txt; rm -rf codes/{0}";
+            case CPP -> executionCommand = "g++ -o codes/{0}/output {0}/{1} && timeout 1s codes/{0}/output < codes/{0}/input.txt; rm -rf codes/{0}";
+            case PYTHON -> executionCommand = "timeout 1s python3 codes/{0}/{1} < codes/{0}/input.txt; rm -rf codes/{0}";
+            case SHELL -> executionCommand = "timeout 1s sh codes/{0}/{1} < codes/{0}/input.txt; rm -rf codes/{0}";
+            case JAVA -> executionCommand = "javac codes/{0}/{1} && timeout 1s java codes/{0}/{1} < codes/{0}/input.txt; rm -rf codes/{0}";
+            case TYPESCRIPT -> executionCommand = "timeout 1s npx ts-node codes/{0}/{1} < codes/{0}/input.txt; rm -rf codes/{0}";
+            case JAVASCRIPT -> executionCommand = "timeout 1s npx node codes/{0}/{1} < codes/{0}/input.txt; rm -rf codes/{0}";
             default -> throw new InternalError();
         }
 
@@ -80,7 +79,7 @@ public class CodeRunner {
                     "-c",
                     MessageFormat.format(executionCommand, folderName, fileName)
             };
-            Process proc = null;
+            Process proc;
             proc = rt.exec(commands);
 
             assert proc != null;
@@ -90,7 +89,7 @@ public class CodeRunner {
             BufferedReader stdError = new BufferedReader(new
                     InputStreamReader(proc.getErrorStream()));
 
-            String s = null;
+            String s;
             StringJoiner output = new StringJoiner(System.lineSeparator());
             while ((s = stdError.readLine()) != null) {
                 output.add(s);
