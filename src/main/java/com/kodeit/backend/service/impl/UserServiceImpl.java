@@ -217,6 +217,7 @@ public class UserServiceImpl implements UserService {
             IOUtils.copy(file.getInputStream(), fo);
             amazonS3.putObject(bucketName, "public/user_logo/" + u.getId() + ".png", f);
             String url = "https://kodeit.s3.ap-south-1.amazonaws.com/public/user_logo/"+u.getId()+".png";
+            f.delete();
             u.setAvatar(url);
             return url;
         }

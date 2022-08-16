@@ -178,6 +178,7 @@ public class CodeServiceImpl implements CodeService {
 
         if (!u.getCodesStarred().contains(c)) {
             u.getCodesStarred().add(c);
+            c.getStarredUsers().add(u);
             c.setStars(c.getStars() + 1);
         }
     }
@@ -190,6 +191,7 @@ public class CodeServiceImpl implements CodeService {
 
         if (u.getCodesStarred().contains(c)) {
             u.getCodesStarred().remove(c);
+            c.getStarredUsers().remove(u);
             c.setStars(c.getStars() - 1);
         }
     }
